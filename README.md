@@ -18,8 +18,6 @@ The `cert:import` goal is bound to the `compile` phase, and is used to imports H
 
 #### Example 1
 
-Execution with `includes` directive.
-
 ```xml
 <plugin>
   <groupId>org.safris.maven.plugin</groupId>
