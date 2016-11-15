@@ -8,13 +8,13 @@ The `cert-maven-plugin` plugin is used for general SSL Certificate-related goals
 
 ## Goals Overview
 
-* [`cert`:`import`](https://github.com/SevaSafris/java/new/master/maven/plugin/cert-maven-plugin#certimport) imports HTTPS server certificates of the `project`.`repositories` to the keystore.
+* [`cert:import`](https://github.com/SevaSafris/java/new/master/maven/plugin/cert-maven-plugin#certimport) imports HTTPS server certificates of the `project`.`repositories` to the keystore.
 
 ## Usage
 
-### `cert`:`import`
+### `cert:import`
 
-The `cert`:`import` goal is bound to the `compile` phase, and is used to imports HTTPS server certificates of the `project`.`repositories` to the keystore.
+The `cert:import` goal is bound to the `compile` phase, and is used to imports HTTPS server certificates of the `project`.`repositories` to the keystore.
 
 #### Example 1
 
