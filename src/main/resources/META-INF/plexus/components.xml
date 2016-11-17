@@ -1,0 +1,19 @@
+<component-set xmlns="http://plexus.codehaus.org/xsd/components">
+  <components>
+    <component>
+      <role>org.apache.maven.lifecycle.Lifecycle</role>
+      <role-hint>cert</role-hint>
+      <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
+      <configuration>
+        <id>cert</id>
+        <phases>
+          <phase>cert</phase>
+        </phases>
+        <default-phases>
+          <cert>org.safris.maven.plugin:cert-maven-plugin:import</cert>
+          <initialize>org.safris.maven.plugin:cert-maven-plugin:import</initialize>
+        </default-phases>
+      </configuration>
+    </component>
+  </components>
+</component-set>

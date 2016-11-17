@@ -56,12 +56,6 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-dependency-plugin</artifactId>
-    </dependency>
-  </dependencies>
   <repositories>
     <repository>
       <id>mvn.repo.safris.org</id>

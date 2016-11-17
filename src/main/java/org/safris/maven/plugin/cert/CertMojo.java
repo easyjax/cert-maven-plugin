@@ -45,7 +45,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.safris.maven.common.AdvancedMojo;
 
-@Mojo(name = "import", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "import", defaultPhase = LifecyclePhase.INITIALIZE)
 @Execute(goal = "import")
 public final class CertMojo extends AdvancedMojo {
   public static final Set<String> checkedURLs = new HashSet<String>();
