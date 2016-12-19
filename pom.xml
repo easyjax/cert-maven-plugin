@@ -28,6 +28,11 @@
   <artifactId>cert-maven-plugin</artifactId>
   <version>1.0.4</version>
   <name>${project.groupId}:${project.artifactId}</name>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <packaging>maven-plugin</packaging>
   <build>
     <plugins>
