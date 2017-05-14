@@ -37,17 +37,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.model.Repository;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.safris.maven.common.AdvancedMojo;
 
 @Mojo(name = "import", defaultPhase = LifecyclePhase.INITIALIZE)
 @Execute(goal = "import")
-public final class CertMojo extends AdvancedMojo {
+public final class CertMojo extends AbstractMojo {
   public static final Set<String> checkedURLs = new HashSet<String>();
 
   @Parameter(property = "project.repositories", readonly = true, required = true)
