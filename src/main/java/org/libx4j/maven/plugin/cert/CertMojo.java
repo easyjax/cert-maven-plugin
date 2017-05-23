@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.safris.maven.plugin.cert;
+package org.libx4j.maven.plugin.cert;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
