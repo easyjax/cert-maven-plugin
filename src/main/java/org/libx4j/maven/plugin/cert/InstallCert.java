@@ -34,11 +34,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -51,7 +55,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 public final class InstallCert {
-  public static void main(final String[] args) throws Exception {
+  public static void main(final String[] args) throws CertificateException, IOException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException {
     String host;
     int port;
     char[] passphrase;
