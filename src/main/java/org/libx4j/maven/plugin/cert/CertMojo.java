@@ -31,7 +31,12 @@
 package org.libx4j.maven.plugin.cert;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -80,7 +85,7 @@ public final class CertMojo extends AbstractMojo {
           getLog().error("Please run the same command as root, via \"sudo\".");
           System.exit(0);
         }
-        catch (final Exception e) {
+        catch (final CertificateException | IOException | KeyManagementException | KeyStoreException | NoSuchAlgorithmException e) {
           throw new MojoExecutionException("Failure due to InstallCert", e);
         }
       }
