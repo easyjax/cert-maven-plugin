@@ -23,7 +23,7 @@
       <configuration>
         <id>cert</id>
         <default-phases>
-          <initialize>org.libx4j.maven.plugin:cert-maven-plugin:import</initialize>
+          <initialize>org.lib4j.maven.plugin:cert-maven-plugin:import</initialize>
         </default-phases>
       </configuration>
     </component>
@@ -37,7 +37,7 @@
           <phase>cert</phase>
         </phases>
         <default-phases>
-          <cert>org.libx4j.maven.plugin:cert-maven-plugin:import</cert>
+          <cert>org.lib4j.maven.plugin:cert-maven-plugin:import</cert>
         </default-phases>
       </configuration>
     </component>
