@@ -50,12 +50,12 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "import", defaultPhase = LifecyclePhase.INITIALIZE)
-@Execute(goal = "import")
+@Mojo(name="import", defaultPhase=LifecyclePhase.INITIALIZE)
+@Execute(goal="import")
 public final class CertMojo extends AbstractMojo {
   public static final Set<String> checkedURLs = new HashSet<String>();
 
-  @Parameter(property = "project.repositories", readonly = true, required = true)
+  @Parameter(property="project.repositories", readonly=true, required=true)
   private boolean mavenTestSkip;
   private List<Repository> repositories;
 
