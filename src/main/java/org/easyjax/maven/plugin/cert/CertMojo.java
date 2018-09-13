@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.libx4j.maven.plugin.cert;
+package org.easyjax.maven.plugin.cert;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
