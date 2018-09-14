@@ -21,7 +21,7 @@ The `cert:import` goal is bound to the `compile` phase, and is used to import HT
 
 ```xml
 <plugin>
-  <groupId>org.libx4j.maven.plugin</groupId>
+  <groupId>org.easyjax.maven.plugin</groupId>
   <artifactId>cert-maven-plugin</artifactId>
   <version>1.0.6-SNAPSHOT</version>
 </plugin>
