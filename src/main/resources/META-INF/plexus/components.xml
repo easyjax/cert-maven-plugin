@@ -23,7 +23,7 @@
       <configuration>
         <id>cert</id>
         <default-phases>
-          <initialize>org.easyjax.maven.plugin:cert-maven-plugin:import</initialize>
+          <initialize>org.easyjax:cert-maven-plugin:import</initialize>
         </default-phases>
       </configuration>
     </component>
@@ -37,7 +37,7 @@
           <phase>cert</phase>
         </phases>
         <default-phases>
-          <cert>org.easyjax.maven.plugin:cert-maven-plugin:import</cert>
+          <cert>org.easyjax:cert-maven-plugin:import</cert>
         </default-phases>
       </configuration>
     </component>

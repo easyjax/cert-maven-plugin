@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.easyjax.maven.plugin.cert;
+package org.easyjax.cert;
 
 import java.io.BufferedReader;
 import java.io.File;
