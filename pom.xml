@@ -25,6 +25,7 @@
     <version>3.7.5-SNAPSHOT</version>
   </parent>
   <artifactId>cert-maven-plugin</artifactId>
+  <version>0.8.9-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>${project.groupId}:${project.artifactId}</name>
   <properties>
