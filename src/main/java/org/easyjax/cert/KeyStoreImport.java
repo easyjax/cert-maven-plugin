@@ -44,7 +44,7 @@ import java.security.cert.CertificateFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 
 public class KeyStoreImport {
-  public static void main(final String args[]) throws Exception {
+  public static void main(final String[] args) throws Exception {
     // Meaningful variable names for the arguments
     final String keyStoreFileName = args[0];
     final String certificateChainFileName = args[1];
