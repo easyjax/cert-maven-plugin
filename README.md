@@ -1,7 +1,6 @@
-<img src="https://images.cooltext.com/5195724.png" align="right">
+# EasyJAX Cert Maven Plugin
 
-## cert-maven-plugin<br>![mvn-plugin][mvn-plugin] <a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
-> Maven Plugin for SSL Certificate-related goals
+**Maven Plugin for SSL Certificate-related goals**
 
 ### Introduction
 
@@ -26,6 +25,16 @@ The `cert:import` goal is bound to the `compile` phase, and is used to import HT
   <version>0.8.9-SNAPSHOT</version>
 </plugin>
 ```
+
+### JavaDocs
+
+JavaDocs are available [here](https://www.easyjax.org/cert-maven-plugin/javadocs/).
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
 
 ### License
 
