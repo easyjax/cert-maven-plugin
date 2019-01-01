@@ -1,4 +1,4 @@
-# EasyJAX Cert Maven Plugin
+# OpenJAX Support Cert Maven Plugin
 
 **Maven Plugin for SSL Certificate-related goals**
 
@@ -20,7 +20,7 @@ The `cert:import` goal is bound to the `compile` phase, and is used to import HT
 
 ```xml
 <plugin>
-  <groupId>org.easyjax.cert</groupId>
+  <groupId>org.openjax.support.cert</groupId>
   <artifactId>cert-maven-plugin</artifactId>
   <version>0.8.9-SNAPSHOT</version>
 </plugin>
@@ -28,7 +28,7 @@ The `cert:import` goal is bound to the `compile` phase, and is used to import HT
 
 ### JavaDocs
 
-JavaDocs are available [here](https://www.easyjax.org/cert-maven-plugin/javadocs/).
+JavaDocs are available [here](https://support.openjax.org/cert-maven-plugin/apidocs/).
 
 ## Contributing
 
@@ -39,7 +39,3 @@ Please make sure to update tests as appropriate.
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
-
-<a href="http://cooltext.com" target="_top"><img src="https://cooltext.com/images/ct_pixel.gif" width="80" height="15" alt="Cool Text: Logo and Graphics Generator" border="0" /></a>
-
-[mvn-plugin]: https://img.shields.io/badge/mvn-plugin-lightgrey.svg

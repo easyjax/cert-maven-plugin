@@ -1,5 +1,5 @@
 <!--
-  Copyright (c) 2016 EasyJAX
+  Copyright (c) 2016 OpenJAX
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
       <configuration>
         <id>cert</id>
         <default-phases>
-          <initialize>org.easyjax:cert-maven-plugin:import</initialize>
+          <initialize>org.openjax.support:cert-maven-plugin:import</initialize>
         </default-phases>
       </configuration>
     </component>
@@ -37,7 +37,7 @@
           <phase>cert</phase>
         </phases>
         <default-phases>
-          <cert>org.easyjax:cert-maven-plugin:import</cert>
+          <cert>org.openjax.support:cert-maven-plugin:import</cert>
         </default-phases>
       </configuration>
     </component>

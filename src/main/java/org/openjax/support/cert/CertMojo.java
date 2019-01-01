@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.easyjax.cert;
+package org.openjax.support.cert;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
