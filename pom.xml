@@ -54,7 +54,7 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.openjax.classic.xml</groupId>
+        <groupId>org.openjax.standard.xml</groupId>
         <artifactId>xml-maven-plugin</artifactId>
       </plugin>
     </plugins>
