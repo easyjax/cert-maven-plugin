@@ -1,6 +1,8 @@
 # OpenJAX Support Cert Maven Plugin
 
-**Maven Plugin for SSL Certificate-related goals**
+> Maven Plugin for SSL Certificate-related goals
+
+[![Build Status](https://travis-ci.org/openjax/cert-maven-plugin.png)](https://travis-ci.org/openjax/cert-maven-plugin)
 
 ### Introduction
 
