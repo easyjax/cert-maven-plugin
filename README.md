@@ -3,6 +3,7 @@
 > Maven Plugin for SSL Certificate-related goals
 
 [![Build Status](https://travis-ci.org/openjax/cert-maven-plugin.png)](https://travis-ci.org/openjax/cert-maven-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/cert-maven-plugin/badge.svg)](https://coveralls.io/github/openjax/cert-maven-plugin)
 
 ### Introduction
 
