@@ -36,7 +36,10 @@ import org.openjax.standard.maven.mojo.BaseMojo;
 @Mojo(name="import", defaultPhase=LifecyclePhase.INITIALIZE)
 @Execute(goal="import")
 public class CertMojo extends BaseMojo {
-  public final Set<String> checkedURLs = new HashSet<>();
+  private final Set<String> checkedURLs = new HashSet<>();
+
+  @Parameter(property = "password")
+  private String password;
 
   @Parameter(property="project.repositories", readonly=true, required=true)
   private List<Repository> repositories;
@@ -46,31 +49,32 @@ public class CertMojo extends BaseMojo {
   }
 
   @Override
-  public void execute(boolean failOnNoOp) throws MojoExecutionException, MojoFailureException {
+  public void execute(final boolean failOnNoOp) throws MojoExecutionException, MojoFailureException {
+    boolean modified = false;
     for (final Repository repository : getRepositories()) {
-      if (repository.getUrl().startsWith("https") && !checkedURLs.contains(repository.getUrl())) {
-        try {
-          final URL url = new URL(repository.getUrl());
-          getLog().info(url.getHost() + ":" + url.getPort());
-          String arg = url.getHost();
-          if (url.getPort() != -1)
-            InstallCert.install(arg, url.getPort(), "changeit".toCharArray());
+      if (!repository.getUrl().startsWith("https") || checkedURLs.contains(repository.getUrl()))
+        continue;
 
-          InstallCert.main(new String[] {arg});
-          checkedURLs.add(repository.getUrl());
-        }
-        catch (final FileNotFoundException e) {
-          if (!e.getMessage().contains("(Permission denied)"))
-            throw new MojoFailureException("Failure due to " + InstallCert.class.getSimpleName(), e);
+      try {
+        final URL url = new URL(repository.getUrl());
+        getLog().info(url.getHost() + ":" + url.getPort());
+        modified |= InstallCert.install(url.getHost(), url.getPort() != -1 ? url.getPort() : 443, password == null ? null : password.toCharArray());
+        checkedURLs.add(repository.getUrl());
+      }
+      catch (final FileNotFoundException e) {
+        if (!e.getMessage().contains("(Permission denied)"))
+          throw new MojoFailureException("Failure due to " + InstallCert.class.getSimpleName(), e);
 
-          getLog().error("Attempting to modify JDK CA certificates file " + e.getMessage());
-          getLog().error("Please run the same command as root, via \"sudo\".");
-          return;
-        }
-        catch (final GeneralSecurityException | IOException e) {
-          throw new MojoExecutionException("Failure due to " + InstallCert.class.getSimpleName(), e);
-        }
+        getLog().error("Attempting to modify JDK CA certificates file " + e.getMessage());
+        getLog().error("Please run the same command as root, via \"sudo\".");
+        return;
+      }
+      catch (final GeneralSecurityException | IOException e) {
+        throw new MojoExecutionException("Failure due to " + InstallCert.class.getSimpleName(), e);
       }
     }
+
+    if (!modified && failOnNoOp)
+      throw new MojoExecutionException("Certificate not installed (failOnNoOp=true)");
   }
 }
