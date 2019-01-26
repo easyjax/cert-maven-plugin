@@ -1,31 +1,17 @@
-/* Copyright 2006 Sun Microsystems, Inc.  All Rights Reserved.
+/* Copyright (c) 2006 OpenJAX
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Sun Microsystems nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, final STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * You should have received a copy of The MIT License (MIT) along with this
+ * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
 package org.openjax.support.cert;
@@ -33,30 +19,26 @@ package org.openjax.support.cert;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
+import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.model.Repository;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.openjax.standard.maven.mojo.BaseMojo;
 
 @Mojo(name="import", defaultPhase=LifecyclePhase.INITIALIZE)
 @Execute(goal="import")
-public final class CertMojo extends AbstractMojo {
-  public static final Set<String> checkedURLs = new HashSet<>();
+public class CertMojo extends BaseMojo {
+  public final Set<String> checkedURLs = new HashSet<>();
 
   @Parameter(property="project.repositories", readonly=true, required=true)
-  private boolean mavenTestSkip;
   private List<Repository> repositories;
 
   public List<Repository> getRepositories() {
@@ -64,7 +46,7 @@ public final class CertMojo extends AbstractMojo {
   }
 
   @Override
-  public void execute() throws MojoExecutionException, MojoFailureException {
+  public void execute(boolean failOnNoOp) throws MojoExecutionException, MojoFailureException {
     for (final Repository repository : getRepositories()) {
       if (repository.getUrl().startsWith("https") && !checkedURLs.contains(repository.getUrl())) {
         try {
@@ -72,21 +54,21 @@ public final class CertMojo extends AbstractMojo {
           getLog().info(url.getHost() + ":" + url.getPort());
           String arg = url.getHost();
           if (url.getPort() != -1)
-            arg += ":" + url.getPort();
+            InstallCert.install(arg, url.getPort(), "changeit".toCharArray());
 
           InstallCert.main(new String[] {arg});
           checkedURLs.add(repository.getUrl());
         }
         catch (final FileNotFoundException e) {
           if (!e.getMessage().contains("(Permission denied)"))
-            throw new MojoFailureException("Failure due to InstallCert", e);
+            throw new MojoFailureException("Failure due to " + InstallCert.class.getSimpleName(), e);
 
           getLog().error("Attempting to modify JDK CA certificates file " + e.getMessage());
           getLog().error("Please run the same command as root, via \"sudo\".");
-          System.exit(0);
+          return;
         }
-        catch (final CertificateException | IOException | KeyManagementException | KeyStoreException | NoSuchAlgorithmException e) {
-          throw new MojoExecutionException("Failure due to InstallCert", e);
+        catch (final GeneralSecurityException | IOException e) {
+          throw new MojoExecutionException("Failure due to " + InstallCert.class.getSimpleName(), e);
         }
       }
     }

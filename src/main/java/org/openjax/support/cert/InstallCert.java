@@ -38,11 +38,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.security.KeyManagementException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -55,21 +53,20 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 public final class InstallCert {
-  public static void main(final String[] args) throws CertificateException, IOException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException {
-    String host;
-    int port;
-    char[] passphrase;
-    if (args.length == 1 || args.length == 2) {
-      final String[] c = args[0].split(":");
-      host = c[0];
-      port = c.length == 1 ? 443 : Integer.parseInt(c[1]);
-      final String p = args.length == 1 ? "changeit" : args[1];
-      passphrase = p.toCharArray();
+  public static void main(final String[] args) throws GeneralSecurityException, IOException {
+    if (args.length != 1 && args.length != 2) {
+      System.out.println("Usage: " + InstallCert.class.getName() + " <host>[:port] [passphrase]");
+      System.exit(1);
     }
-    else {
-      System.out.println("Usage: java InstallCert <host>[:port] [passphrase]");
-      return;
-    }
+
+    final String[] parts = args[0].split(":");
+    if (!install(parts[0], parts.length == 1 ? 443 : Integer.parseInt(parts[1]), args.length == 1 ? null : args[1].toCharArray()))
+      System.exit(1);
+  }
+
+  public static boolean install(final String host, final int port, char[] passphrase) throws GeneralSecurityException, IOException {
+    if (passphrase == null)
+      passphrase = "changeit".toCharArray();
 
     System.out.println("InstallCert.main()" + System.getProperty("java.home"));
 
@@ -82,22 +79,22 @@ public final class InstallCert {
     }
 
     System.out.println("Loading KeyStore " + file.getAbsolutePath() + "...");
-    final KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-    try (InputStream in = new FileInputStream(file)) {
-      ks.load(in, passphrase);
+    final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+    try (final InputStream in = new FileInputStream(file)) {
+      keyStore.load(in, passphrase);
     }
 
     final SSLContext context = SSLContext.getInstance("TLS");
-    final TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-    tmf.init(ks);
+    final TrustManagerFactory managerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    managerFactory.init(keyStore);
 
-    final X509TrustManager defaultTrustManager = (X509TrustManager)tmf.getTrustManagers()[0];
-    final SavingTrustManager tm = new SavingTrustManager(defaultTrustManager);
-    context.init(null, new TrustManager[] {tm}, null);
-    SSLSocketFactory factory = context.getSocketFactory();
+    final X509TrustManager defaultTrustManager = (X509TrustManager)managerFactory.getTrustManagers()[0];
+    final SavingTrustManager trustManager = new SavingTrustManager(defaultTrustManager);
+    context.init(null, new TrustManager[] {trustManager}, null);
+    final SSLSocketFactory socketTactory = context.getSocketFactory();
 
     System.out.println("Opening connection to " + host + ":" + port + "...");
-    final SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
+    final SSLSocket socket = (SSLSocket)socketTactory.createSocket(host, port);
     socket.setSoTimeout(10000);
     try {
       System.out.println("Starting SSL handshake...");
@@ -111,10 +108,10 @@ public final class InstallCert {
       e.printStackTrace(System.out);
     }
 
-    X509Certificate[] chain = tm.chain;
+    X509Certificate[] chain = trustManager.chain;
     if (chain == null) {
       System.out.println("Could not obtain server certificate chain");
-      return;
+      return false;
     }
 
     final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -124,7 +121,7 @@ public final class InstallCert {
     System.out.println();
     final MessageDigest sha1 = MessageDigest.getInstance("SHA1");
     final MessageDigest md5 = MessageDigest.getInstance("MD5");
-    for (int i = 0; i < chain.length; i++) {
+    for (int i = 0; i < chain.length; ++i) {
       X509Certificate cert = chain[i];
       System.out.println(" " + (i + 1) + " Subject " + cert.getSubjectDN());
       System.out.println("   Issuer  " + cert.getIssuerDN());
@@ -143,43 +140,44 @@ public final class InstallCert {
     }
     catch (final NumberFormatException e) {
       System.out.println("KeyStore not changed");
-      return;
+      return false;
     }
 
     final X509Certificate cert = chain[k];
     final String alias = host + "-" + (k + 1);
-    ks.setCertificateEntry(alias, cert);
+    keyStore.setCertificateEntry(alias, cert);
 
     try (final OutputStream out = new FileOutputStream(file)) {
-      ks.store(out, passphrase);
+      keyStore.store(out, passphrase);
     }
 
     System.out.println();
     System.out.println(cert);
     System.out.println();
     System.out.println("Added certificate to keystore " + file.getAbsolutePath()  + " using alias '" + alias + "'");
+    return true;
   }
 
   private static final char[] HEXDIGITS = "0123456789abcdef".toCharArray();
 
   private static String toHexString(final byte[] bytes) {
-    final StringBuilder sb = new StringBuilder(bytes.length * 3);
+    final StringBuilder builder = new StringBuilder(bytes.length * 3);
     for (int b : bytes) {
       b &= 0xff;
-      sb.append(HEXDIGITS[b >> 4]);
-      sb.append(HEXDIGITS[b & 15]);
-      sb.append(' ');
+      builder.append(HEXDIGITS[b >> 4]);
+      builder.append(HEXDIGITS[b & 15]);
+      builder.append(' ');
     }
 
-    return sb.toString();
+    return builder.toString();
   }
 
   private static final class SavingTrustManager implements X509TrustManager {
-    private final X509TrustManager tm;
+    private final X509TrustManager trustManager;
     private X509Certificate[] chain;
 
-    SavingTrustManager(final X509TrustManager tm) {
-      this.tm = tm;
+    SavingTrustManager(final X509TrustManager trustManager) {
+      this.trustManager = trustManager;
     }
 
     @Override
@@ -195,7 +193,7 @@ public final class InstallCert {
     @Override
     public void checkServerTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
       this.chain = chain;
-      tm.checkServerTrusted(chain, authType);
+      trustManager.checkServerTrusted(chain, authType);
     }
   }
 }

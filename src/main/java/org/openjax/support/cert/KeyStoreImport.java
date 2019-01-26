@@ -35,7 +35,9 @@ package org.openjax.support.cert;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -44,7 +46,7 @@ import java.security.cert.CertificateFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 
 public class KeyStoreImport {
-  public static void main(final String[] args) throws Exception {
+  public static void main(final String[] args) throws GeneralSecurityException, IOException {
     // Meaningful variable names for the arguments
     final String keyStoreFileName = args[0];
     final String certificateChainFileName = args[1];
@@ -54,13 +56,12 @@ public class KeyStoreImport {
     final String privateKeyEntryPassword = args[5];
 
     final File keyFile = new File(privateKeyFileName);
-    try (
-      final FileInputStream certificateStream = new FileInputStream(certificateChainFileName);
-      final FileInputStream keyInputStream = new FileInputStream(keyFile);
-    ) {
-      final byte[] key = new byte[(int)keyFile.length()];
+    final byte[] key = new byte[(int)keyFile.length()];
+    try (final FileInputStream keyInputStream = new FileInputStream(keyFile)) {
       keyInputStream.read(key);
+    }
 
+    try (final FileInputStream certificateStream = new FileInputStream(certificateChainFileName)) {
       final KeyStore keyStore;
       if (keyStoreFileName != null) {
         keyStore = KeyStore.getInstance("jks");
@@ -69,7 +70,6 @@ public class KeyStoreImport {
         }
 
         makeKeystore(keyStore, certificateStream, key, entryAlias, privateKeyEntryPassword);
-
         try (final FileOutputStream keyStoreOutputStream = new FileOutputStream(keyStoreFileName)) {
           keyStore.store(keyStoreOutputStream, keyStorePassword.toCharArray());
         }
@@ -80,15 +80,14 @@ public class KeyStoreImport {
     }
   }
 
-  public static KeyStore makeKeystore(final KeyStore defaultKeystore, final InputStream certificateChainInputStream, final byte[] key, final String entryAlias, final String privateKeyEntryPassword) throws Exception {
+  private static KeyStore makeKeystore(final KeyStore defaultKeystore, final InputStream certificateChainInputStream, final byte[] key, final String entryAlias, final String privateKeyEntryPassword) throws GeneralSecurityException {
     final KeyStore keyStore = defaultKeystore != null ? defaultKeystore : KeyStore.getInstance("jks");
 
     // Load the certificate chain (in X.509 DER encoding).
     final CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
     // Required because Java is STUPID. You can't just cast the result
     // of toArray to Certificate[].
-    Certificate[] chain = {};
-    chain = certificateFactory.generateCertificates(certificateChainInputStream).toArray(chain);
+    final Certificate[] chain = certificateFactory.generateCertificates(certificateChainInputStream).toArray(new Certificate[0]);
 
     // Load the private key (in PKCS#8 DER encoding).
     final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
