@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/openjax/cert-maven-plugin.png)](https://travis-ci.org/openjax/cert-maven-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/cert-maven-plugin/badge.svg)](https://coveralls.io/github/openjax/cert-maven-plugin)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.support/cert-maven-plugin.svg)](https://www.javadoc.io/doc/org.openjax.support/cert-maven-plugin)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.support/cert-maven-plugin.svg)](https://mvnrepository.com/artifact/org.openjax.support/cert-maven-plugin)
 
 ### Introduction
 
@@ -28,10 +30,6 @@ The `cert:import` goal is bound to the `compile` phase, and is used to import HT
   <version>0.8.9-SNAPSHOT</version>
 </plugin>
 ```
-
-### JavaDocs
-
-JavaDocs are available [here](https://support.openjax.org/cert-maven-plugin/apidocs/).
 
 ## Contributing
 
