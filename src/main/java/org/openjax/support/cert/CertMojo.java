@@ -31,7 +31,7 @@ import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.openjax.standard.maven.mojo.BaseMojo;
+import org.openjax.ext.maven.mojo.BaseMojo;
 
 @Mojo(name="import", defaultPhase=LifecyclePhase.INITIALIZE)
 @Execute(goal="import")
