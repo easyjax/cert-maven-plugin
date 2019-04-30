@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.support.cert;
+package org.openjax.std.cert;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

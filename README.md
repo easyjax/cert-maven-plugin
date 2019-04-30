@@ -1,11 +1,11 @@
-# OpenJAX Support Cert Maven Plugin
+# OpenJAX Std Cert Maven Plugin
 
 > Maven Plugin for SSL Certificate-related goals
 
 [![Build Status](https://travis-ci.org/openjax/cert-maven-plugin.png)](https://travis-ci.org/openjax/cert-maven-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/cert-maven-plugin/badge.svg)](https://coveralls.io/github/openjax/cert-maven-plugin)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.support/cert-maven-plugin.svg)](https://www.javadoc.io/doc/org.openjax.support/cert-maven-plugin)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.support/cert-maven-plugin.svg)](https://mvnrepository.com/artifact/org.openjax.support/cert-maven-plugin)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.std/cert-maven-plugin.svg)](https://www.javadoc.io/doc/org.openjax.std/cert-maven-plugin)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.std/cert-maven-plugin.svg)](https://mvnrepository.com/artifact/org.openjax.std/cert-maven-plugin)
 
 ### Introduction
 
@@ -25,7 +25,7 @@ The `cert:import` goal is bound to the `compile` phase, and is used to import HT
 
 ```xml
 <plugin>
-  <groupId>org.openjax.support.cert</groupId>
+  <groupId>org.openjax.std.cert</groupId>
   <artifactId>cert-maven-plugin</artifactId>
   <version>0.8.9-SNAPSHOT</version>
 </plugin>

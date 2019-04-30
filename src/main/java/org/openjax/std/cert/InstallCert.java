@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.openjax.support.cert;
+package org.openjax.std.cert;
 
 import java.io.BufferedReader;
 import java.io.File;
